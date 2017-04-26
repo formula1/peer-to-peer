@@ -10,7 +10,7 @@ var DataHandler = require("./data-handler");
 var MainView = require("./view/MainView");
 
 var ws = new WebSocket(
-  (window.location.protocol === "https:" ? "wss:" : "ws") + "//"
+  (window.location.protocol === "https:" ? "wss:" : "ws:") + "//"
     + window.location.hostname
     + ":" + window.location.port
     + window.location.pathname

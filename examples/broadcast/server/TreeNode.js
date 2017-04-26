@@ -11,15 +11,12 @@ class TreeNode extends EventEmitter {
     this.alive = true;
   }
   formatToJSON(){
-    var keys = this.children.keys();
-    keys = Array.from(keys);
-    console.log(keys);
     return !this.alive ? null : {
       head: findHead(this),
       alive: this.alive,
       id: this.id,
       parent: this.parent ? this.parent.id : null,
-      children: keys,
+      children: Array.from(this.children.keys()),
     };
   }
   addChild(treeNode){
@@ -58,7 +55,7 @@ class TreeNode extends EventEmitter {
   destroyTree(){
     return Array.from(this.children.values()).map((child) =>{
       this.removeChild(child);
-      child.destroyTree();
+      child.destroySelf();
     });
   }
   replaceSelf(){

@@ -1,4 +1,4 @@
-var Server = require("http").Server,
+const Server = require("http").Server,
   path = require("path"),
   express = require("express"),
   Cookies = require("cookies"),
@@ -7,7 +7,8 @@ var Server = require("http").Server,
   WebSocketServer = require("ws").Server,
   fs = require("fs"),
   url = require("url"),
-  resolve = require("resolve");
+  resolve = require("resolve"),
+  ConnectionHandler = require("../lib/server/ConnectionHandler");
 
 var __examples = path.resolve(__dirname, "../examples");
 
@@ -85,7 +86,7 @@ app.get("/:example/client.js", function(req, res){
 
 var wss = new WebSocketServer({ server: server });
 
-var wsMap = {};
+var connectionhandlerMap = {};
 wss.on("connection", function(ws){
   var req = ws.upgradeReq;
   var pathname = url.parse(req.url).pathname;
@@ -103,20 +104,16 @@ wss.on("connection", function(ws){
     console.log("no cookie set");
     return ws.close();
   }
-  var user = cookies.get("user");
-  if(wsMap[user]){
-    console.log("already connected");
-    return ws.close();
+  if(!(pathname in connectionhandlerMap)){
+    connectionhandlerMap[pathname] = new ConnectionHandler();
+    websocketHandler(connectionhandlerMap[pathname]);
   }
-  wsMap[user] = ws;
+  var user = cookies.get("user");
   ws.id = user;
-  ws.on("close", function(){
-    delete wsMap[user];
-  });
-  websocketHandler(ws);
+  connectionhandlerMap[pathname].addPeer(ws);
 });
 
 server.on("request", app);
-server.listen(process.env.PORT, function(){
+server.listen(process.env.PORT || 8080, function(){
   console.log("Listening on " + server.address().port);
 });
