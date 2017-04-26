@@ -14,7 +14,7 @@ module.exports = function(state = initialState, action){
           return;
         }
         var peer = peers[peerId];
-        peer.rtc && peer.rtc.close();
+        peer.rtc && peer.rtc.signalingState !== "closed" && peer.rtc.close();
       });
       var updatedPeers = Object.keys(peers).filter(function(peerId){
         return diff.remove.indexOf(peerId) === -1;
