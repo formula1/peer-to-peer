@@ -11,6 +11,7 @@
     "Map": true,
     "setTimeout": true,
     "clearTimeout": true,
+    "setImmediate": true,
     "__dirname": true,
     "global": true,
     "self": true,
