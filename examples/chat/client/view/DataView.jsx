@@ -33,6 +33,6 @@ module.exports = class DataView extends React.Component {
   }
   render(){
     var { content } = this.state;
-    return (<pre style={{ fontSize: "24px" }}>{content}</pre>);
+    return (<pre style={{ fontSize: "8px" }}>{content}</pre>);
   }
 };
