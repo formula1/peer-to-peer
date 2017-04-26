@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev-start": "watch npm run start",
+    "start": "node template/server",
+    "build:chat": "docker built -t chat_client $(pwd)/examples/chat/client/cli",
+    "start:node-client": "docker run -it -v $(pwd):/app chat_client",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

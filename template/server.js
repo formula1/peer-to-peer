@@ -117,6 +117,6 @@ wss.on("connection", function(ws){
 });
 
 server.on("request", app);
-server.listen(8080, function(){
+server.listen(process.env.PORT, function(){
   console.log("Listening on " + server.address().port);
 });

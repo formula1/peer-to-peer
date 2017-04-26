@@ -1,4 +1,4 @@
-/* global document window */
+/* global document window examples */
 var React = require("react");
 var { render } = require("react-dom");
 
