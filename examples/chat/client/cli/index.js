@@ -17,17 +17,21 @@ require("webrtc-adapter");
 
 var PeerHandler = require("../peer-handler");
 var DataHandler = require("../data-handler");
+var View = require("./view");
 
 function createWebsocket(urlstring){
+  console.log(urlstring);
   return Promise.resolve().then(function(){
-    return url.parse(urlstring);
+    return Object.assign({ protocol: "http:" }, url.parse(urlstring));
   }).then(function(urlObject){
     return fetch(url.format(
-      Object.assign({}, urlObject, { protocol: "http:" }))
-    ).then(function(resp){
+      urlObject
+    )).then(function(resp){
       console.log(resp.headers.get("set-cookie"));
       var cookie = resp.headers.get("set-cookie");
-      var wsstring = url.format(Object.assign({}, urlObject, { protocol: "ws:" }));
+      var wsstring = url.format(Object.assign({}, urlObject,
+        { protocol: urlObject.protocol === "https:" ? "wss:" : "ws:" }
+      ));
       var ws = new WebSocket(wsstring, void 0, void 0, { cookie: cookie });
       return eventTargetListen(ws, { res: "open", rej: "error" }, function(){
         console.log(ws.readyState);
@@ -56,7 +60,7 @@ program.version("0.0.1");
 program.command("watch")
   .option("-u, --url <url>", "specify the host url", defaultUrl())
   .option("-b, --broadcaster <n>", "specify which broadcaster to connect to", "0")
-  .option("-t, --times <n>", "number of watchers to run", "0")
+  .option("-t, --times <n>", "number of watchers to run", "1")
   .action(function(options){
     var times = parseInt(options.times);
     for(var i = 0; i < times; i++){
@@ -77,9 +81,10 @@ program.command("broadcast")
         broadcastData,
         getDataEmitter,
       } = dataHandler;
+      var view = View();
 
       getDataEmitter().on("data", function(message){
-        console.log(message);
+        view.setText(message);
       });
 
       var v8 = require("v8");
@@ -106,9 +111,10 @@ function createWatcher(options){
     var {
       getDataEmitter,
     } = dataHandler;
+    var view = View();
 
     getDataEmitter().on("data", function(message){
-      console.log(message);
+      view.setText(message);
     });
 
     var broadcasterIndex = parseInt(options.broadcaster);
