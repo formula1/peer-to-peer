@@ -7,7 +7,7 @@ module.exports = function(){
   });
   screen._listenedMouse = true;
 
-  screen.title = "my window title";
+  screen.title = "<3";
 
   // Create a box perfectly centered horizontally and vertically.
   var box = blessed.box({
