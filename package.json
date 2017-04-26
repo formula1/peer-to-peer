@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node template/server",
-    "build:chat": "docker built -t chat_client $(pwd)/examples/chat/client/cli",
-    "start:node-client": "docker run -it -v $(pwd):/app chat_client",
-    "start:node-client:watch:c9": "docker run -it -v $(pwd):/app chat_client watch -u https://peer-to-peer-formula1.c9users.io/chat/",
+    "build:chat": "docker built -t broadcast_client $(pwd)/examples/chat/client/cli",
+    "start:node-client": "docker run -it -v $(pwd):/app broadcast_client",
+    "start:node-client:watch:c9": "docker run -it -v $(pwd):/app chat_client watch -u https://peer-to-peer-formula1.c9users.io/broadcast/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
